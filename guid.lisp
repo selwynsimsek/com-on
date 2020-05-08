@@ -94,7 +94,7 @@
   (declare (ignore param))
   (cffi:foreign-free ptr))
 
-(defmethod cffi:translate-into-foreign-memory ((guid guid) (type com:guid) ptr)
+(defmethod cffi:translate-into-foreign-memory ((guid guid) (type (eql 'com:guid)) ptr)
   (let ((dat (bytes guid)))
     (dotimes (i 16 ptr)
       (setf (cffi:mem-aref ptr :uint8 i) (aref dat i)))))
@@ -105,4 +105,4 @@
 (defmacro define-guid (name &rest id)
   `(eval-when (:compile-toplevel :load-toplevel :execute)
      (defconstant ,name (cond ((boundp ',name) (symbol-value ',name))
-                              (T (make-guid ,@id))))))
+                              (T (guid ,@id))))))
